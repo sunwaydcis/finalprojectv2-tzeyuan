@@ -5,6 +5,8 @@ ThisBuild / scalaVersion := "2.12.19"
 lazy val root = (project in file("."))
   .settings(
     name := "Calculator",
-    libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.192-R11",
-
+    libraryDependencies ++= Seq(
+      "org.scalafx" %% "scalafx" % "8.0.192-R11",
+      "org.scalatest" %% "scalatest" % "3.2.19" % Test
+    )
   )
