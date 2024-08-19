@@ -1,4 +1,4 @@
-package address.model
+package ch.makery.address.model
 
 trait Operation {
   def execute(x: Double, y: Double): Double
