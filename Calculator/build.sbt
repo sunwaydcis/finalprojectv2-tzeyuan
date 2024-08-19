@@ -6,7 +6,13 @@ lazy val root = (project in file("."))
   .settings(
     name := "Calculator",
     libraryDependencies ++= Seq(
-      "org.scalafx" %% "scalafx" % "8.0.192-R11",
-      "org.scalatest" %% "scalatest" % "3.2.19" % Test
+      "org.scalafx" %% "scalafx" % "8.0.192-R14",
+      "org.scalafx" %% "scalafxml-core-sfx8" % "0.5",
+      "org.apache.derby" % "derby" % "10.12.1.1",
+      "org.scalikejdbc" %% "scalikejdbc"      % "4.3.0",
+      "com.h2database" % "h2"                 % "2.2.224",
+      "ch.qos.logback" % "logback-classic"    % "1.5.6"
+
     )
   )
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
