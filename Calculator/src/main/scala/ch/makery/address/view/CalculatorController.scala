@@ -18,7 +18,7 @@ class CalculatorController(
                             private val btn7: Button,
                             private val btn8: Button,
                             private val btn9: Button,
-                            private val btnAdd: Button,
+                            private val btnPlus: Button,
                             private val btnMinus: Button,
                             private val btnMultiply: Button,
                             private val btnDivide: Button,
