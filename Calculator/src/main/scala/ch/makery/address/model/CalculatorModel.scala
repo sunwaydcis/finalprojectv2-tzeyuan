@@ -1,8 +1,8 @@
 package ch.makery.address.model
 
 class CalculatorModel {
-    private var currentInput = ""
-    private var result = ""
+    private var currentInput: String = ""
+    private var result: String = "0"
 
     def appendInput(input: String): Unit = {
       currentInput += input
@@ -10,7 +10,7 @@ class CalculatorModel {
 
     def clear(): Unit = {
       currentInput = ""
-      result = ""
+      result = "0"
     }
 
     def calculate(): Unit = {
@@ -23,33 +23,31 @@ class CalculatorModel {
     }
 
     def getCurrentResult: String = {
-      if (result.isEmpty) currentInput else result
+      if (currentInput.isEmpty) result else currentInput
     }
 
     private def eval(expression: String): Double = {
-      // Basic expression evaluation using Scala's built-in expression parsing
-      import scala.util.parsing.combinator.JavaTokenParsers
-
-      object SimpleCalculator extends JavaTokenParsers {
+      val parser = new scala.util.parsing.combinator.JavaTokenParsers {
         def expr: Parser[Double] = term ~ rep(("+" | "-") ~ term) ^^ {
           case t ~ list => list.foldLeft(t) {
             case (x, "+" ~ y) => x + y
             case (x, "-" ~ y) => x - y
           }
         }
-        def term: Parser[Double] = factor ~ rep(("*" | "/") ~ factor) ^^ {
+        def term: Parser[Double] = factor ~ rep(("*" | "x") ~ factor | ("/" | "÷") ~ factor) ^^ {
           case f ~ list => list.foldLeft(f) {
-            case (x, "*" ~ y) => x * y
-            case (x, "/" ~ y) => x / y
+            case (x, ("*" | "x") ~ y) => x * y
+            case (x, ("/" | "÷") ~ y) => x / y
           }
         }
         def factor: Parser[Double] = floatingPointNumber ^^ (_.toDouble) | "(" ~> expr <~ ")"
-        def parseAll[T](p: Parser[T], input: String): ParseResult[T] = parseAll(p, input)
+
       }
 
-      SimpleCalculator.parseAll(SimpleCalculator.expr, expression) match {
-        case SimpleCalculator.Success(result, _) => result
-        case _ => throw new IllegalArgumentException("Invalid expression")
+      val result = parser.parseAll(parser.expr, expression)
+      result match {
+        case parser.Success(res, _) => res
+        case _ => 0.0
       }
     }
   }
