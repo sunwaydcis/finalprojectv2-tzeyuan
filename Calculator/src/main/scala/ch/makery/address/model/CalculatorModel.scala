@@ -30,14 +30,14 @@ class CalculatorModel {
       val parser = new scala.util.parsing.combinator.JavaTokenParsers {
         def expr: Parser[Double] = term ~ rep(("+" | "-") ~ term) ^^ {
           case t ~ list => list.foldLeft(t) {
-            case (x, "+" ~ y) => x + y
-            case (x, "-" ~ y) => x - y
+            case (x, "+" ~ y) => applyOperation(new Addition, x, y)
+            case (x, "-" ~ y) => applyOperation(new Subtraction, x, y)
           }
         }
         def term: Parser[Double] = factor ~ rep(("*" | "x") ~ factor | ("/" | "÷") ~ factor) ^^ {
           case f ~ list => list.foldLeft(f) {
-            case (x, ("*" | "x") ~ y) => x * y
-            case (x, ("/" | "÷") ~ y) => x / y
+            case (x, ("*" | "x") ~ y) => applyOperation(new Multiplication, x, y)
+            case (x, ("/" | "÷") ~ y) => applyOperation(new Division, x, y)
           }
         }
         def factor: Parser[Double] = floatingPointNumber ^^ (_.toDouble) | "(" ~> expr <~ ")"
@@ -49,6 +49,10 @@ class CalculatorModel {
         case parser.Success(res, _) => res
         case _ => 0.0
       }
+    }
+
+    private def applyOperation(operation: Operation, operand1: Double, operand2: Double): Double = {
+      operation.execute(operand1, operand2)
     }
   }
 
